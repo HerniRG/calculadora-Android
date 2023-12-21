@@ -111,10 +111,10 @@
 
             />
         <Button
-            android:id="@+id/btnMultiplica"
+            android:id="@+id/btnMultiplicacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/x"
+            android:text="@string/multiplicacion"
             android:backgroundTint="@color/orange"
             />
     </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.calculadora
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -33,22 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initComponents()
-        btnIgual.setOnClickListener { igualClick() }
-        btnLimpiar.setOnClickListener { limpiarClick() }
-        btn0.setOnClickListener { ceroClick() }
-        btn1.setOnClickListener { unoClick() }
-        btn2.setOnClickListener { dosClick() }
-        btn3.setOnClickListener { tresClick() }
-        btn4.setOnClickListener { cuatroClick() }
-        btn5.setOnClickListener { cincoClick() }
-        btn6.setOnClickListener { seisClick() }
-        btn7.setOnClickListener { sieteClick() }
-        btn8.setOnClickListener { ochoClick() }
-        btn9.setOnClickListener { nueveClick() }
-        btnSuma.setOnClickListener { sumaClick() }
-        btnResta.setOnClickListener { restaClick() }
-        btnMultiplicacion.setOnClickListener { multiplicacionClick() }
-        btnDivision.setOnClickListener { divisionClick() }
+        setOnClickListeners()
     }
 
     private fun initComponents() {
@@ -68,13 +54,48 @@ class MainActivity : AppCompatActivity() {
         btn9 = findViewById(R.id.btn9)
         btnSuma = findViewById(R.id.btnSuma)
         btnResta = findViewById(R.id.btnMenos)
-        btnMultiplicacion = findViewById(R.id.btnMultiplica)
+        btnMultiplicacion = findViewById(R.id.btnMultiplicacion)
         btnDivision = findViewById(R.id.btnDivision)
+
+    }
+
+    private fun setOnClickListeners() {
+        val numeros = listOf(btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9)
+        val operadores = listOf(btnSuma, btnResta, btnMultiplicacion, btnDivision)
+
+        numeros.forEach { button ->
+            button.setOnClickListener {
+                agregarDigito(button.text.toString())
+            }
+        }
+
+        operadores.forEach { button ->
+            button.setOnClickListener {
+                seleccionarOperacion(button.text.toString())
+            }
+        }
+
+        btnIgual.setOnClickListener { igualClick() }
+        btnLimpiar.setOnClickListener { limpiarClick() }
+    }
+
+    private fun agregarDigito(digito: String) {
+        tvCuenta.append(digito)
+    }
+
+    private fun seleccionarOperacion(op: String) {
+        if (tvCuenta.text.isNotEmpty()) {
+            num1 = tvCuenta.text.toString().toDouble()
+            operacion = op
+            tvCuenta.text = ""
+            Log.d("Calculadora", "Operación seleccionada: $operacion")
+        }
     }
 
     private fun igualClick() {
         if (tvCuenta.text.isNotEmpty() && operacion != null) {
             val num2 = tvCuenta.text.toString().toDouble()
+            Log.d("Calculadora", "num1: $num1, operacion: $operacion, num2: $num2")
             var resultado: Double = 0.0
             when (operacion) {
                 "+" -> resultado = num1 + num2
@@ -95,84 +116,14 @@ class MainActivity : AppCompatActivity() {
 
             operacion = null
             limpiarClick()
+            Log.d("Calculadora", "Operación realizada: $resultado")
         }
     }
+
+
 
     private fun limpiarClick() {
         tvCuenta.text = ""
         num1 = 0.0
-
-    }
-
-    private fun ceroClick() {
-        tvCuenta.text = tvCuenta.text.toString() + "0"
-    }
-
-    private fun unoClick() {
-        tvCuenta.text = tvCuenta.text.toString() + "1"
-    }
-
-    private fun dosClick() {
-        tvCuenta.text = tvCuenta.text.toString() + "2"
-    }
-
-    private fun tresClick() {
-        tvCuenta.text = tvCuenta.text.toString() + "3"
-    }
-
-    private fun cuatroClick() {
-        tvCuenta.text = tvCuenta.text.toString() + "4"
-    }
-
-    private fun cincoClick() {
-        tvCuenta.text = tvCuenta.text.toString() + "5"
-    }
-
-    private fun seisClick() {
-        tvCuenta.text = tvCuenta.text.toString() + "6"
-    }
-
-    private fun sieteClick() {
-        tvCuenta.text = tvCuenta.text.toString() + "7"
-    }
-
-    private fun ochoClick() {
-        tvCuenta.text = tvCuenta.text.toString() + "8"
-    }
-
-    private fun nueveClick() {
-        tvCuenta.text = tvCuenta.text.toString() + "9"
-    }
-
-    private fun sumaClick() {
-        if (tvCuenta.text.isNotEmpty()) {
-            num1 = tvCuenta.text.toString().toDouble()
-            operacion = "+"
-            tvCuenta.text = ""
-        }
-    }
-
-    private fun restaClick() {
-        if (tvCuenta.text.isNotEmpty()) {
-            num1 = tvCuenta.text.toString().toDouble()
-            operacion = "-"
-            tvCuenta.text = ""
-        }
-    }
-
-    private fun multiplicacionClick() {
-        if (tvCuenta.text.isNotEmpty()) {
-            num1 = tvCuenta.text.toString().toDouble()
-            operacion = "*"
-            tvCuenta.text = ""
-        }
-    }
-
-    private fun divisionClick() {
-        if (tvCuenta.text.isNotEmpty()) {
-            num1 = tvCuenta.text.toString().toDouble()
-            operacion = "/"
-            tvCuenta.text = ""
-        }
     }
 }
